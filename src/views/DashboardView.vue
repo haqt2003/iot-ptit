@@ -1,0 +1,227 @@
+<template>
+  <div
+    class="bg-[url('@/assets/images/bg.svg')] bg-center bg-no-repeat bg-cover h-[100vh] w-[100vw] py-6 overflow-x-hidden"
+  >
+    <div class="max-w-[1280px] mx-auto glassmorphism-container p-5">
+      <div
+        class="glassmorphism w-[340px] h-[64px] mx-auto flex items-center justify-center gap-10"
+      >
+        <div
+          class="h-9 w-9 bg-[#4E96FF] rounded-[10px] flex justify-center items-center"
+        >
+          <img
+            src="../assets/images/dashboard-icon.svg"
+            alt=""
+            class="cursor-pointer"
+          />
+        </div>
+        <router-link to="/history"
+          ><img
+            src="../assets/images/history-icon.svg"
+            alt=""
+            class="cursor-pointer"
+        /></router-link>
+        <router-link to="/sensor"
+          ><img
+            src="../assets/images/sensor-icon.svg"
+            alt=""
+            class="cursor-pointer"
+        /></router-link>
+        <router-link to="profile"
+          ><img
+            src="../assets/images/profile-icon.svg"
+            alt=""
+            class="cursor-pointer"
+        /></router-link>
+      </div>
+      <div class="flex justify-between mt-9">
+        <div class="w-[542px] h-[348px] glassmorphism px-8">
+          <div class="flex justify-between items-center mt-7">
+            <div class="flex items-center">
+              <img src="../assets/images/logo.svg" alt="" />
+              <div class="ml-5">
+                <span class="block font-normal">Nhiệt độ</span>
+                <div class="relative">
+                  <span class="text-[56px] font-bold leading-none">23</span>
+                  <span class="text-[20px] absolute top-4">°C</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <span class="text-[30px]">Thứ sáu</span>
+              <span class="block">23 thg 7, 2024</span>
+            </div>
+          </div>
+          <div class="mt-8 flex items-center gap-[140px]">
+            <div class="flex items-center gap-4">
+              <img src="../assets/images/humidity-icon.svg" alt="" />
+              <div class="">
+                <span class="text-[14px] font-light">Độ ẩm</span>
+                <span class="block font-bold">88%</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <img src="../assets/images/light-icon.svg" alt="" />
+              <div class="">
+                <span class="text-[14px] font-light">Ánh sáng</span>
+                <span class="block font-bold">700</span>
+              </div>
+            </div>
+          </div>
+          <div class="h-[1px] w-full bg-[#FFFFFF] opacity-30 mt-9"></div>
+          <div class="text-center font-bold text-[56px] mt-2">11:00</div>
+        </div>
+        <div class="w-[678px] h-[348px] glassmorphism px-10">
+          <div class="flex items-center justify-between mt-10">
+            <div class="font-bold text-[32px]">ESP 8266</div>
+            <a
+              href="https://vi.wikipedia.org/wiki/ESP8266"
+              target="_blank"
+              class="flex items-center cursor-pointer"
+            >
+              <span class="text-[14px] block font-light mt-[1px]"
+                >Tìm hiểu thêm</span
+              >
+              <img src="../assets/images/right.svg" alt="" />
+            </a>
+          </div>
+          <div class="flex justify-between items-center mt-10">
+            <p class="font-light text-[14px] text-justify w-[320px]">
+              Lorem ipsum dolor sit amet consectetur. Arcu nisl sit vestibulum
+              amet gravida nunc fusce. Egestas in posuere dui cras eget nisi.
+              Amet quis cursus phasellus neque. Vestibulum egestas in habitant
+              vel at facilisi amet. Lorem ipsum dolor sit amet consectetur. Arcu
+              nisl sit vestibulum amet gravida nunc fusce. Egestas in posuere
+              dui cras eget nisi. Amet quis cursus phasellus.
+            </p>
+            <img src="../assets/images/esp.svg" alt="" />
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between mt-5">
+        <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[380px]">
+          <div class="glassmorphism w-full h-[180px] px-8 relative">
+            <div class="flex justify-between items-center mt-8">
+              <span class="text-[20px]">Độ ẩm</span>
+              <img
+                src="../assets/images/turn-off.svg"
+                alt=""
+                class="cursor-pointer"
+              />
+            </div>
+            <img
+              src="../assets/images/leaf.svg"
+              alt=""
+              class="absolute -left-1 bottom-0"
+            />
+          </div>
+          <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
+            <div class="flex justify-between items-center mt-8">
+              <span class="text-[20px]">Nhiệt độ</span>
+              <img
+                src="../assets/images/turn-off.svg"
+                alt=""
+                class="cursor-pointer"
+              />
+            </div>
+            <img
+              src="../assets/images/temp.svg"
+              alt=""
+              class="absolute left-12 bottom-0"
+            />
+          </div>
+          <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
+            <div class="flex justify-between items-center mt-8">
+              <span class="text-[20px]">Ánh sáng</span>
+              <img
+                src="../assets/images/turn-on.svg"
+                alt=""
+                class="cursor-pointer"
+              />
+            </div>
+            <img
+              src="../assets/images/light.svg"
+              alt=""
+              class="absolute left-0 -bottom-22 w-[180px]"
+            />
+          </div>
+        </div>
+        <div
+          class="flex justify-center items-center w-[678px] h-[380px] glassmorphism px-8"
+        >
+          <Bar :data="data" :options="options" class="w-full" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { defineComponent, reactive } from "vue";
+
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+
+import { Bar } from "vue-chartjs";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export default defineComponent({
+  name: "App",
+  components: {
+    Bar,
+  },
+  setup() {
+    const data = reactive({
+      labels: ["January", "February", "March"],
+      datasets: [{ data: [40, 20, 12] }],
+    });
+
+    const options = reactive({
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: "white", // Màu chữ cho legend
+          },
+        },
+      },
+      backgroundColor: "white", // Nền trắng cho biểu đồ
+      scales: {
+        x: {
+          ticks: {
+            color: "white", // Màu chữ trục x là trắng
+          },
+          grid: {
+            color: "#B8C0C3", // Màu đường kẻ trục x là trắng
+          },
+        },
+        y: {
+          ticks: {
+            color: "white", // Màu chữ trục y là trắng
+          },
+          grid: {
+            color: "#B8C0C3", // Màu đường kẻ trục x là trắng
+          },
+        },
+      },
+    });
+
+    return { data, options };
+  },
+});
+</script>
