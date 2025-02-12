@@ -103,11 +103,10 @@
           <div class="glassmorphism w-full h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Độ ẩm</span>
-              <img
-                src="../assets/images/turn-off.svg"
-                alt=""
-                class="cursor-pointer"
-              />
+              <label class="switch block" @click="toggleHumidity">
+                <input type="checkbox" checked />
+                <span class="slider round"></span>
+              </label>
             </div>
             <img
               src="../assets/images/leaf.svg"
@@ -118,11 +117,10 @@
           <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Nhiệt độ</span>
-              <img
-                src="../assets/images/turn-off.svg"
-                alt=""
-                class="cursor-pointer"
-              />
+              <label class="switch block" @click="toggleTemp">
+                <input type="checkbox" checked />
+                <span class="slider round"></span>
+              </label>
             </div>
             <img
               src="../assets/images/temp.svg"
@@ -133,11 +131,10 @@
           <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Ánh sáng</span>
-              <img
-                src="../assets/images/turn-on.svg"
-                alt=""
-                class="cursor-pointer"
-              />
+              <label class="switch block" @click="toggleLight">
+                <input type="checkbox" checked />
+                <span class="slider round"></span>
+              </label>
             </div>
             <img
               src="../assets/images/light.svg"
@@ -157,8 +154,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from "vue";
-
+import { defineComponent, reactive, ref } from "vue";
 import {
   Chart as ChartJS,
   Title,
@@ -168,7 +164,6 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-
 import { Bar } from "vue-chartjs";
 
 ChartJS.register(
@@ -186,6 +181,10 @@ export default defineComponent({
     Bar,
   },
   setup() {
+    const isTemp = ref(true);
+    const isHumidity = ref(true);
+    const isLight = ref(true);
+
     const data = reactive({
       labels: ["January", "February", "March"],
       datasets: [{ data: [40, 20, 12] }],
@@ -221,7 +220,19 @@ export default defineComponent({
       },
     });
 
-    return { data, options };
+    function toggleLight() {
+      isLight.value = !isLight.value;
+    }
+
+    function toggleHumidity() {
+      isHumidity.value = !isHumidity.value;
+    }
+
+    function toggleTemp() {
+      isTemp.value = !isTemp.value;
+    }
+
+    return { data, options, toggleLight, toggleHumidity, toggleTemp };
   },
 });
 </script>
