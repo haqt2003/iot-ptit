@@ -82,3 +82,12 @@ body {
     rgba(0, 0, 0, 0) 100%
   );
 }
+
+iframe::-webkit-scrollbar {
+  display: none;
+}
+
+iframe {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
