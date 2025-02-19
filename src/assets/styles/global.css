@@ -141,3 +141,26 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.btn-paginate {
+  height: 32px;
+  width: 32px;
+  border: none;
+  cursor: pointer;
+  margin-left: 16px;
+}
+
+.back-btn-paginate {
+  font-weight: bold;
+  margin-left: 0px;
+}
+
+.next-btn-paginate {
+  font-weight: bold;
+}
+
+.btn-paginate-active {
+  color: white;
+  border-radius: 50%;
+  background-color: #4e96ff;
+}

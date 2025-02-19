@@ -974,7 +974,7 @@
 
 "@kurkle/color@^0.3.0":
   version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@kurkle/color/-/color-0.3.4.tgz#4d4ff677e1609214fc71c580125ddddd86abcabf"
+  resolved "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz"
   integrity sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==
 
 "@leichtgewicht/ip-codec@^2.0.1":
@@ -1433,7 +1433,7 @@
   resolved "https://registry.npmjs.org/@vue/cli-plugin-vuex/-/cli-plugin-vuex-5.0.8.tgz"
   integrity sha512-HSYWPqrunRE5ZZs8kVwiY6oWcn95qf/OQabwLfprhdpFWAGtLStShjsGED2aDpSSeGAskQETrtR/5h7VqgIlBA==
 
-"@vue/cli-service@~5.0.0":
+"@vue/cli-service@^5.0.8":
   version "5.0.8"
   resolved "https://registry.npmjs.org/@vue/cli-service/-/cli-service-5.0.8.tgz"
   integrity sha512-nV7tYQLe7YsTtzFrfOMIHc5N2hp5lHG2rpYr0aNja9rNljdgcPZLyQRb2YRivTHqTv7lI962UXFURcpStHgyFw==
@@ -2231,7 +2231,7 @@ chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.2:
 
 chart.js@^4.4.7:
   version "4.4.7"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-4.4.7.tgz#7a01ee0b4dac3c03f2ab0589af888db296d896fa"
+  resolved "https://registry.npmjs.org/chart.js/-/chart.js-4.4.7.tgz"
   integrity sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==
   dependencies:
     "@kurkle/color" "^0.3.0"
@@ -2983,7 +2983,7 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-prettier@^8.3.0:
+eslint-config-prettier@^8.10.0:
   version "8.10.0"
   resolved "https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-8.10.0.tgz"
   integrity sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==
@@ -3443,7 +3443,7 @@ fs.realpath@^1.0.0:
 
 fsevents@~2.3.2:
   version "2.3.3"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.2:
@@ -5159,7 +5159,7 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-"prettier@^1.18.2 || ^2.0.0", prettier@^2.4.1:
+"prettier@^1.18.2 || ^2.0.0", prettier@^2.8.8:
   version "2.8.8"
   resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.8.tgz"
   integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
@@ -6223,9 +6223,16 @@ vary@~1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
+vue-awesome-paginate@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-awesome-paginate/-/vue-awesome-paginate-1.2.0.tgz#9ec261095e3c1f9aa1d929af6a58d866a6c1ef27"
+  integrity sha512-+eYXo666E2n8NhpEPIdJcQEoJBDLo7wMGv45D2+i/VDntz2o422jRNcMQ7VESMgAcKyReWMwb9m99esCjsO/hw==
+  dependencies:
+    vue "^3.4.30"
+
 vue-chartjs@^5.3.2:
   version "5.3.2"
-  resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-5.3.2.tgz#c0f2009af6b08845af158ddee9d0a68d9dae631b"
+  resolved "https://registry.npmjs.org/vue-chartjs/-/vue-chartjs-5.3.2.tgz"
   integrity sha512-NrkbRRoYshbXbWqJkTN6InoDVwVb90C0R7eAVgMWcB9dPikbruaOoTFjFYHE/+tNPdIe6qdLCDjfjPHQ0fw4jw==
 
 vue-eslint-parser@^8.0.1:
@@ -6275,7 +6282,7 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^3.2.13:
+vue@^3.2.13, vue@^3.4.30:
   version "3.5.13"
   resolved "https://registry.npmjs.org/vue/-/vue-3.5.13.tgz"
   integrity sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ==

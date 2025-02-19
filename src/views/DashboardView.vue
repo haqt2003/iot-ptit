@@ -87,12 +87,12 @@
           </div>
           <div class="flex justify-between items-center mt-10">
             <p class="font-light text-[14px] text-justify w-[320px]">
-              Lorem ipsum dolor sit amet consectetur. Arcu nisl sit vestibulum
-              amet gravida nunc fusce. Egestas in posuere dui cras eget nisi.
-              Amet quis cursus phasellus neque. Vestibulum egestas in habitant
-              vel at facilisi amet. Lorem ipsum dolor sit amet consectetur. Arcu
-              nisl sit vestibulum amet gravida nunc fusce. Egestas in posuere
-              dui cras eget nisi. Amet quis cursus phasellus.
+              ESP8266, tên đầy đủ là ESP8266EX là một vi mạch Wi-Fi có hỗ trợ bộ
+              giao thức TCP/IP và có thể tích hợp vào thành phần của vi điều
+              khiển, được sản xuất bởi hãng Espressif Systems ở Thượng Hải,
+              Trung Quốc, là một chip ESP8266 với 1 MiB bộ nhớ flash được tích
+              hợp, cho phép người dùng có thể sản xuất các thiết bị có khả năng
+              kết nối với Wi-Fi chỉ với một chip đơn.
             </p>
             <img src="../assets/images/esp.svg" alt="" />
           </div>
@@ -154,7 +154,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue"
 import {
   Chart as ChartJS,
   Title,
@@ -163,17 +163,10 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-} from "chart.js";
-import { Bar } from "vue-chartjs";
+} from "chart.js"
+import { Bar } from "vue-chartjs"
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export default defineComponent({
   name: "App",
@@ -181,14 +174,14 @@ export default defineComponent({
     Bar,
   },
   setup() {
-    const isTemp = ref(true);
-    const isHumidity = ref(true);
-    const isLight = ref(true);
+    const isTemp = ref(true)
+    const isHumidity = ref(true)
+    const isLight = ref(true)
 
     const data = reactive({
       labels: ["January", "February", "March"],
       datasets: [{ data: [40, 20, 12] }],
-    });
+    })
 
     const options = reactive({
       responsive: true,
@@ -218,21 +211,21 @@ export default defineComponent({
           },
         },
       },
-    });
+    })
 
     function toggleLight() {
-      isLight.value = !isLight.value;
+      isLight.value = !isLight.value
     }
 
     function toggleHumidity() {
-      isHumidity.value = !isHumidity.value;
+      isHumidity.value = !isHumidity.value
     }
 
     function toggleTemp() {
-      isTemp.value = !isTemp.value;
+      isTemp.value = !isTemp.value
     }
 
-    return { data, options, toggleLight, toggleHumidity, toggleTemp };
+    return { data, options, toggleLight, toggleHumidity, toggleTemp }
   },
-});
+})
 </script>

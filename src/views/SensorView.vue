@@ -49,11 +49,20 @@
             <img src="../assets/images/calendar-icon.svg" alt="" />
           </div>
         </div>
-        <div
-          class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
-        >
-          <span class="text-[14px] block">Lọc theo cảm biến</span>
-          <img src="../assets/images/down.svg" alt="" />
+        <div class="flex items-center gap-4">
+          <div
+            class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
+          >
+            <span class="text-[14px] block">Lọc theo cảm biến</span>
+            <img src="../assets/images/down.svg" alt="" />
+          </div>
+          <div
+            @click="resizeList"
+            class="glassmorphism w-[200px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
+          >
+            <span class="text-[14px] block">Kích thước: {{ pageSize }}</span>
+            <img src="../assets/images/down.svg" alt="" />
+          </div>
         </div>
       </div>
       <div class="mt-5 w-full glassmorphism">
@@ -67,75 +76,173 @@
         <div class="w-full h-[1px] bg-white opacity-60 mt-9"></div>
         <div class="">
           <div
+            v-for="(item, index) in paginateList"
+            :key="index"
             class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
           >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
-          </div>
-          <div
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
-          >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
-          </div>
-          <div
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
-          >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
-          </div>
-          <div
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
-          >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
-          </div>
-          <div
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
-          >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
-          </div>
-          <div
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
-          >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
-          </div>
-          <div
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
-          >
-            <span>1</span>
-            <span>25℃</span>
-            <span>88%</span>
-            <span>700</span>
-            <span>2/9/2025 - 11:30:29</span>
+            <span>{{ item.id }}</span>
+            <span>{{ item.temp }}℃</span>
+            <span>{{ item.humidity }}%</span>
+            <span>{{ item.light }}</span>
+            <span>{{ item.time }}</span>
           </div>
         </div>
-        <img
-          src="../assets/images/pag.svg"
-          alt=""
-          class="mx-auto mt-[54px] mb-9"
-        />
+        <vue-awesome-paginate
+          :total-items="list.length"
+          :items-per-page="pageSize"
+          :max-pages-shown="3"
+          v-model="currentPage"
+          paginate-buttons-class="btn-paginate"
+          active-page-class="btn-paginate-active"
+          back-button-class="back-btn-paginate"
+          next-button-class="next-btn-paginate"
+        >
+          <template #prev-button>
+            <button class="w-[20px] mt-[6px]">
+              <img src="../assets/images/left.svg" alt="" />
+            </button>
+          </template>
+          <template #next-button>
+            <button class="w-[20px] mt-[6px]">
+              <img src="../assets/images/right.svg" alt="" />
+            </button>
+          </template>
+        </vue-awesome-paginate>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { onMounted, reactive, ref, computed } from "vue"
+import { VueAwesomePaginate } from "vue-awesome-paginate"
+export default {
+  components: {
+    VueAwesomePaginate,
+  },
+  setup() {
+    const currentPage = ref(1)
+    const pageSize = ref(10)
+    const tempList = ref([])
+    const list = reactive([
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+      {
+        id: "1",
+        temp: "25",
+        humidity: "88",
+        light: "700",
+        time: "2/9/2025 - 11:30:29",
+      },
+    ])
+    const resizeList = () => {
+      if (pageSize.value == 6) {
+        pageSize.value = 10
+      } else {
+        pageSize.value = 6
+      }
+      currentPage.value = 1
+    }
+
+    const paginateList = computed(() => {
+      const start = (currentPage.value - 1) * pageSize.value
+      const end = start + pageSize.value
+      return tempList.value.slice(start, end)
+    })
+
+    const getList = async () => {
+      tempList.value = list
+    }
+
+    onMounted(() => {
+      getList()
+      resizeList()
+    })
+
+    return {
+      pageSize,
+      list,
+      tempList,
+      paginateList,
+      currentPage,
+      getList,
+      resizeList,
+    }
+  },
+}
+</script>
+
+<style scoped>
+#componentContainer {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.pagination-container {
+  margin-top: 52px;
+  font-size: 16px;
+  margin-bottom: 36px;
+}
+</style>
