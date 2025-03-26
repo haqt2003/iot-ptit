@@ -37,17 +37,13 @@
       <div class="flex relative mt-[48px] justify-between items-center">
         <div class="flex gap-4">
           <div
-            class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
+            class="glassmorphism w-[250px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
           >
-            <span class="text-[14px] block">From: 14/02/2025</span>
-            <img src="../assets/images/calendar-icon.svg" alt="" />
-            <!-- <input type="date" /> -->
-          </div>
-          <div
-            class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
-          >
-            <span class="text-[14px] block">To: 14/03/2025</span>
-            <img src="../assets/images/calendar-icon.svg" alt="" />
+            <input
+              type="text"
+              class="bg-transparent outline-none text-[14px]"
+              placeholder="Tìm kiếm theo thời gian"
+            />
           </div>
         </div>
         <div
@@ -59,11 +55,18 @@
         </div>
       </div>
       <div class="mt-5 w-full glassmorphism">
-        <div class="flex items-center gap-[268px] mt-10 ml-[60px]">
+        <div class="flex items-center gap-[265px] mt-10 ml-[60px]">
           <span class="font-bold text-[20px]">ID</span>
           <span class="font-bold text-[20px]">Thiết bị</span>
           <span class="font-bold text-[20px]">Hành động</span>
-          <span class="font-bold text-[20px]">Thời gian</span>
+          <div
+            @click="onSortTime"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Thời gian</span>
+            <img v-if="!isSortDesc" src="../assets/images/ic_asc.svg" alt="" />
+            <img v-if="isSortDesc" src="../assets/images/ic_desc.svg" alt="" />
+          </div>
         </div>
         <div class="w-full h-[1px] bg-white opacity-60 mt-9"></div>
         <div class="">
@@ -112,8 +115,9 @@ export default {
     VueAwesomePaginate,
   },
   setup() {
+    const isSortDesc = ref(true)
     const currentPage = ref(1)
-    const pageSize = ref(10)
+    const pageSize = ref(20)
     const list = reactive([
       {
         id: "1",
@@ -215,10 +219,10 @@ export default {
     const tempList = ref([])
 
     const resizeList = () => {
-      if (pageSize.value == 6) {
-        pageSize.value = 10
+      if (pageSize.value == 10) {
+        pageSize.value = 20
       } else {
-        pageSize.value = 6
+        pageSize.value = 10
       }
       currentPage.value = 1
     }
@@ -233,12 +237,17 @@ export default {
       tempList.value = list
     }
 
+    const onSortTime = () => {
+      isSortDesc.value = !isSortDesc.value
+    }
+
     onMounted(() => {
       getList()
       resizeList()
     })
 
     return {
+      isSortDesc,
       pageSize,
       list,
       tempList,
@@ -246,6 +255,7 @@ export default {
       currentPage,
       getList,
       resizeList,
+      onSortTime,
     }
   },
 }

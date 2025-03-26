@@ -37,24 +37,67 @@
       <div class="flex mt-[48px] justify-between items-center">
         <div class="flex gap-4">
           <div
-            class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
+            class="glassmorphism w-[250px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
           >
-            <span class="text-[14px] block">From: 14/02/2025</span>
-            <img src="../assets/images/calendar-icon.svg" alt="" />
-          </div>
-          <div
-            class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
-          >
-            <span class="text-[14px] block">To: 14/03/2025</span>
-            <img src="../assets/images/calendar-icon.svg" alt="" />
+            <input
+              type="text"
+              class="bg-transparent outline-none text-[14px]"
+              placeholder="Tìm kiếm theo chỉ số"
+            />
           </div>
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 relative">
           <div
+            @click="openSelect"
             class="glassmorphism w-[229px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
           >
-            <span class="text-[14px] block">Lọc theo cảm biến</span>
+            <span for="select" class="text-[14px] block">{{
+              currentSensor === "temp"
+                ? "Nhiệt độ"
+                : currentSensor === "humidity"
+                ? "Độ ẩm"
+                : currentSensor === "time"
+                ? "Thời gian"
+                : currentSensor === "all"
+                ? "Tất cả"
+                : (currentSensor = "light" ? "Ánh sáng" : "")
+            }}</span>
             <img src="../assets/images/down.svg" alt="" />
+          </div>
+          <div
+            v-if="isShow"
+            class="absolute -bottom-48 left-0 w-[229px] p-[8px] rounded-[8px] bg-[#E2E3E4] z-10 text-black"
+          >
+            <div
+              @click="onChangeSensor('all')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Tất cả
+            </div>
+            <div
+              @click="onChangeSensor('temp')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Nhiệt độ
+            </div>
+            <div
+              @click="onChangeSensor('humidity')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Độ ẩm
+            </div>
+            <div
+              @click="onChangeSensor('light')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Ánh sáng
+            </div>
+            <div
+              @click="onChangeSensor('time')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Thời gian
+            </div>
           </div>
           <div
             @click="resizeList"
@@ -66,12 +109,84 @@
         </div>
       </div>
       <div class="mt-5 w-full glassmorphism">
-        <div class="flex items-center gap-[185px] mt-10 ml-[60px]">
+        <div class="flex items-center gap-[160px] mt-10 mx-[60px]">
           <span class="font-bold text-[20px]">ID</span>
-          <span class="font-bold text-[20px]">Nhiệt độ</span>
-          <span class="font-bold text-[20px]">Độ ẩm</span>
-          <span class="font-bold text-[20px]">Ánh sáng</span>
-          <span class="font-bold text-[20px]">Thời gian</span>
+          <div
+            @click="onSort('temp')"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Nhiệt độ</span>
+            <img
+              v-if="isSort.direction === true && isSort.name === 'temp'"
+              src="../assets/images/ic_desc.svg"
+              alt=""
+            />
+            <img
+              v-if="
+                (isSort.direction === false && isSort.name === 'temp') ||
+                isSort.name !== 'temp'
+              "
+              src="../assets/images/ic_asc.svg"
+              alt=""
+            />
+          </div>
+          <div
+            @click="onSort('humidity')"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Độ ẩm</span>
+            <img
+              v-if="isSort.direction === true && isSort.name === 'humidity'"
+              src="../assets/images/ic_desc.svg"
+              alt=""
+            />
+            <img
+              v-if="
+                (isSort.direction === false && isSort.name === 'humidity') ||
+                isSort.name !== 'humidity'
+              "
+              src="../assets/images/ic_asc.svg"
+              alt=""
+            />
+          </div>
+          <div
+            @click="onSort('light')"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Ánh sáng</span>
+            <img
+              v-if="isSort.direction === true && isSort.name === 'light'"
+              src="../assets/images/ic_desc.svg"
+              alt=""
+            />
+            <img
+              v-if="
+                (isSort.direction === false && isSort.name === 'light') ||
+                isSort.name !== 'light'
+              "
+              src="../assets/images/ic_asc.svg"
+              alt=""
+            />
+          </div>
+          <div
+            @click="onSort('time')"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Thời gian</span>
+            <img
+              v-if="isSort.direction === true && isSort.name === 'time'"
+              src="../assets/images/ic_desc.svg"
+              alt=""
+            />
+            <img
+              v-if="
+                (isSort.direction === false && isSort.name === 'time') ||
+                isSort.name !== 'time'
+              "
+              src="../assets/images/ic_asc.svg"
+              alt=""
+            />
+          </div>
         </div>
         <div class="w-full h-[1px] bg-white opacity-60 mt-9"></div>
         <div class="">
@@ -121,8 +236,14 @@ export default {
     VueAwesomePaginate,
   },
   setup() {
+    const isSort = ref({
+      name: "time",
+      direction: true,
+    })
+    const currentSensor = ref("all")
+    const isShow = ref(false)
     const currentPage = ref(1)
-    const pageSize = ref(10)
+    const pageSize = ref(20)
     const tempList = ref([])
     const list = reactive([
       {
@@ -197,10 +318,10 @@ export default {
       },
     ])
     const resizeList = () => {
-      if (pageSize.value == 6) {
-        pageSize.value = 10
+      if (pageSize.value == 10) {
+        pageSize.value = 20
       } else {
-        pageSize.value = 6
+        pageSize.value = 10
       }
       currentPage.value = 1
     }
@@ -210,6 +331,22 @@ export default {
       const end = start + pageSize.value
       return tempList.value.slice(start, end)
     })
+
+    const openSelect = () => {
+      isShow.value = !isShow.value
+    }
+
+    const onChangeSensor = (value) => {
+      currentSensor.value = value
+      isShow.value = !isShow.value
+    }
+
+    const onSort = (value) => {
+      if (isSort.value.name === value) {
+        isSort.value.direction = !isSort.value.direction
+      }
+      isSort.value.name = value
+    }
 
     const getList = async () => {
       tempList.value = list
@@ -221,13 +358,19 @@ export default {
     })
 
     return {
+      isSort,
       pageSize,
       list,
       tempList,
+      isShow,
       paginateList,
       currentPage,
+      currentSensor,
       getList,
       resizeList,
+      openSelect,
+      onChangeSensor,
+      onSort,
     }
   },
 }
