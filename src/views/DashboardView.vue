@@ -102,35 +102,35 @@
         <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[380px]">
           <div class="glassmorphism w-full h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
-              <span class="text-[20px]">Độ ẩm</span>
+              <span class="text-[20px]">Đèn 10</span>
               <label class="switch block" @click="toggleHumidity">
                 <input type="checkbox" checked />
                 <span class="slider round"></span>
               </label>
             </div>
             <img
-              src="../assets/images/leaf.svg"
+              src="../assets/images/light.svg"
               alt=""
-              class="absolute -left-1 bottom-0"
+              class="absolute left-24 -bottom-18 w-[180px]"
             />
           </div>
           <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
-              <span class="text-[20px]">Nhiệt độ</span>
+              <span class="text-[20px]">Đèn 2</span>
               <label class="switch block" @click="toggleTemp">
                 <input type="checkbox" checked />
                 <span class="slider round"></span>
               </label>
             </div>
             <img
-              src="../assets/images/temp.svg"
+              src="../assets/images/light.svg"
               alt=""
-              class="absolute left-12 bottom-0"
+              class="absolute left-0 -bottom-22 w-[180px]"
             />
           </div>
           <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
-              <span class="text-[20px]">Ánh sáng</span>
+              <span class="text-[20px]">Đèn 3</span>
               <label class="switch block" @click="toggleLight">
                 <input type="checkbox" checked />
                 <span class="slider round"></span>
@@ -144,9 +144,9 @@
           </div>
         </div>
         <div
-          class="flex justify-center items-center w-[678px] h-[380px] glassmorphism px-8"
+          class="flex justify-center items-center w-[678px] h-[380px] glassmorphism px-10 py-6"
         >
-          <Bar :data="data" :options="options" class="w-full" />
+          <Line :data="data" :options="options" class="w-full" />
         </div>
       </div>
     </div>
@@ -157,21 +157,30 @@
 import { defineComponent, reactive, ref } from "vue"
 import {
   Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
-  BarElement,
+} from "chart.js"
+import { Line } from "vue-chartjs"
+
+ChartJS.register(
   CategoryScale,
   LinearScale,
-} from "chart.js"
-import { Bar } from "vue-chartjs"
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 export default defineComponent({
   name: "App",
   components: {
-    Bar,
+    Line,
   },
   setup() {
     const isTemp = ref(true)
@@ -180,11 +189,20 @@ export default defineComponent({
 
     const data = reactive({
       labels: ["January", "February", "March"],
-      datasets: [{ data: [40, 20, 12] }],
+      datasets: [
+        {
+          data: [40, 20, 12],
+          borderColor: "white",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+      ],
     })
 
     const options = reactive({
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           labels: {
