@@ -38,7 +38,7 @@
         <div class="flex justify-between gap-10">
           <div class="h-[650px]">
             <div class="rounded-[24px] h-[400px] w-[400px] overflow-hidden">
-              <img src="../assets/images/img.svg" alt="" />
+              <img src="../assets/images/img.jpeg" alt="" />
             </div>
             <div class="text-[20px]">
               <div class="mt-6 font-bold text-[32px] text-center gap-4">

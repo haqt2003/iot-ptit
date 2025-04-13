@@ -40,6 +40,7 @@
             class="glassmorphism w-[250px] h-[48px] px-5 flex items-center justify-between cursor-pointer"
           >
             <input
+              v-model="searchValue"
               type="text"
               class="bg-transparent outline-none text-[14px]"
               placeholder="Tìm kiếm theo chỉ số"
@@ -58,12 +59,15 @@
                 ? "Độ ẩm"
                 : currentSensor === "time"
                 ? "Thời gian"
-                : currentSensor === "all"
+                : // : currentSensor === "other"
+                // ? "Khác"
+                currentSensor === "all"
                 ? "Tất cả"
                 : (currentSensor = "light" ? "Ánh sáng" : "")
             }}</span>
             <img src="../assets/images/down.svg" alt="" />
           </div>
+          <!-- 48 -> 56 -->
           <div
             v-if="isShow"
             class="absolute -bottom-48 left-0 w-[229px] p-[8px] rounded-[8px] bg-[#E2E3E4] z-10 text-black"
@@ -92,6 +96,12 @@
             >
               Ánh sáng
             </div>
+            <!-- <div
+              @click="onChangeSensor('other')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Khác
+            </div> -->
             <div
               @click="onChangeSensor('time')"
               class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
@@ -109,8 +119,12 @@
         </div>
       </div>
       <div class="mt-5 w-full glassmorphism">
-        <div class="flex items-center gap-[160px] mt-10 mx-[60px]">
+        <!-- Header Row -->
+        <div
+          class="grid grid-cols-5 items-center text-left gap-4 mt-10 pl-16 pr-6"
+        >
           <span class="font-bold text-[20px]">ID</span>
+
           <div
             @click="onSort('temp')"
             class="flex items-center gap-2 cursor-pointer"
@@ -130,6 +144,7 @@
               alt=""
             />
           </div>
+
           <div
             @click="onSort('humidity')"
             class="flex items-center gap-2 cursor-pointer"
@@ -149,6 +164,7 @@
               alt=""
             />
           </div>
+
           <div
             @click="onSort('light')"
             class="flex items-center gap-2 cursor-pointer"
@@ -168,6 +184,27 @@
               alt=""
             />
           </div>
+
+          <!-- <div
+            @click="onSort('other')"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Khác</span>
+            <img
+              v-if="isSort.direction === true && isSort.name === 'other'"
+              src="../assets/images/ic_desc.svg"
+              alt=""
+            />
+            <img
+              v-if="
+                (isSort.direction === false && isSort.name === 'other') ||
+                isSort.name !== 'other'
+              "
+              src="../assets/images/ic_asc.svg"
+              alt=""
+            />
+          </div> -->
+
           <div
             @click="onSort('time')"
             class="flex items-center gap-2 cursor-pointer"
@@ -188,25 +225,30 @@
             />
           </div>
         </div>
+
         <div class="w-full h-[1px] bg-white opacity-60 mt-9"></div>
-        <div class="">
+
+        <div class="mt-6 space-y-10 pl-16 pr-6">
           <div
-            v-for="(item, index) in paginateList"
+            v-for="(item, index) in list"
             :key="index"
-            class="flex mt-10 items-center justify-between mx-auto w-[1113px] text-center"
+            class="grid grid-cols-5 items-center text-left gap-4 mt-10"
           >
             <span>{{ item.id }}</span>
-            <span>{{ item.temp }}℃</span>
-            <span>{{ item.humidity }}%</span>
-            <span>{{ item.light }}</span>
-            <span>{{ item.time }}</span>
+            <span class="ml-5">{{ item.temp }}℃</span>
+            <span class="ml-5">{{ item.humidity }}%</span>
+            <span class="ml-8">{{ item.light }}</span>
+            <!-- <span class="ml-6">{{ item.other }}</span> -->
+            <span>{{ formatDate(item.time) }}</span>
           </div>
         </div>
+
+        <!-- Pagination -->
         <vue-awesome-paginate
-          :total-items="list.length"
+          :total-items="totalData"
           :items-per-page="pageSize"
-          :max-pages-shown="3"
-          v-model="currentPage"
+          :max-pages-shown="4"
+          v-model="pageNumber"
           paginate-buttons-class="btn-paginate"
           active-page-class="btn-paginate-active"
           back-button-class="back-btn-paginate"
@@ -229,13 +271,15 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref, computed } from "vue"
+import axios from "axios"
+import { onMounted, ref, watch } from "vue"
 import { VueAwesomePaginate } from "vue-awesome-paginate"
 export default {
   components: {
     VueAwesomePaginate,
   },
   setup() {
+    const searchValue = ref("")
     const isSort = ref({
       name: "time",
       direction: true,
@@ -243,97 +287,39 @@ export default {
     const currentSensor = ref("all")
     const isShow = ref(false)
     const currentPage = ref(1)
+    const pageNumber = ref(1)
     const pageSize = ref(20)
-    const tempList = ref([])
-    const list = reactive([
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-      {
-        id: "1",
-        temp: "25",
-        humidity: "88",
-        light: "700",
-        time: "2/9/2025 - 11:30:29",
-      },
-    ])
+
+    const list = ref([])
+    const totalData = ref(NaN)
+
     const resizeList = () => {
-      if (pageSize.value == 10) {
+      if (pageSize.value === 10) {
         pageSize.value = 20
       } else {
         pageSize.value = 10
       }
-      currentPage.value = 1
-    }
 
-    const paginateList = computed(() => {
-      const start = (currentPage.value - 1) * pageSize.value
-      const end = start + pageSize.value
-      return tempList.value.slice(start, end)
-    })
+      const maxPage = Math.ceil(totalData.value / pageSize.value)
+      if (pageNumber.value > maxPage) {
+        pageNumber.value = maxPage
+      }
+    }
 
     const openSelect = () => {
       isShow.value = !isShow.value
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString)
+      const yyyy = date.getFullYear()
+      const mm = String(date.getMonth() + 1).padStart(2, "0")
+      const dd = String(date.getDate()).padStart(2, "0")
+      const hh = String(date.getHours()).padStart(2, "0")
+      const min = String(date.getMinutes()).padStart(2, "0")
+      const ss = String(date.getSeconds()).padStart(2, "0")
+
+      return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
     }
 
     const onChangeSensor = (value) => {
@@ -346,31 +332,45 @@ export default {
         isSort.value.direction = !isSort.value.direction
       }
       isSort.value.name = value
+
+      getData()
     }
 
-    const getList = async () => {
-      tempList.value = list
+    const getData = async () => {
+      const sort = isSort.value.direction ? "DESC" : "ASC"
+      const response = await axios.get(
+        `http://localhost:3000/sensors?searchValue=${searchValue.value}&type=${currentSensor.value}&sortType=${isSort.value.name}&sortDirection=${sort}&pageNumber=${pageNumber.value}&pageSize=${pageSize.value}`
+      )
+      list.value = response.data
+
+      const count = await axios.get("http://localhost:3000/sensors/count")
+      totalData.value = count.data
     }
+
+    watch([searchValue, currentSensor, pageNumber, pageSize], () => {
+      getData()
+    })
 
     onMounted(() => {
-      getList()
+      getData()
       resizeList()
     })
 
     return {
+      searchValue,
+      totalData,
+      pageNumber,
       isSort,
       pageSize,
       list,
-      tempList,
       isShow,
-      paginateList,
       currentPage,
       currentSensor,
-      getList,
       resizeList,
       openSelect,
       onChangeSensor,
       onSort,
+      formatDate,
     }
   },
 }

@@ -42,14 +42,16 @@
               <div class="ml-5">
                 <span class="block font-normal">Nhiệt độ</span>
                 <div class="relative">
-                  <span class="text-[56px] font-bold leading-none">23</span>
+                  <span class="text-[56px] font-bold leading-none">{{
+                    temp
+                  }}</span>
                   <span class="text-[20px] absolute top-4">°C</span>
                 </div>
               </div>
             </div>
             <div class="text-center">
-              <span class="text-[30px]">Thứ sáu</span>
-              <span class="block">23 thg 7, 2024</span>
+              <span class="text-[30px]">{{ currentDay }}</span>
+              <span class="block">{{ currentDate }}</span>
             </div>
           </div>
           <div class="mt-8 flex items-center gap-[140px]">
@@ -57,19 +59,25 @@
               <img src="../assets/images/humidity-icon.svg" alt="" />
               <div class="">
                 <span class="text-[14px] font-light">Độ ẩm</span>
-                <span class="block font-bold">88%</span>
+                <span class="block font-bold">{{ humidity }}%</span>
               </div>
             </div>
             <div class="flex items-center gap-4">
-              <img src="../assets/images/light-icon.svg" alt="" />
+              <img
+                src="../assets/images/light-icon.svg"
+                alt=""
+                :class="{ 'glow-red': light > 1000 }"
+              />
               <div class="">
                 <span class="text-[14px] font-light">Ánh sáng</span>
-                <span class="block font-bold">700</span>
+                <span class="block font-bold">{{ light }}</span>
               </div>
             </div>
           </div>
           <div class="h-[1px] w-full bg-[#FFFFFF] opacity-30 mt-9"></div>
-          <div class="text-center font-bold text-[56px] mt-2">11:00</div>
+          <div class="text-center font-bold text-[56px] mt-2">
+            {{ currentTime }}
+          </div>
         </div>
         <div class="w-[678px] h-[348px] glassmorphism px-10">
           <div class="flex items-center justify-between mt-10">
@@ -102,9 +110,13 @@
         <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[380px]">
           <div class="glassmorphism w-full h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
-              <span class="text-[20px]">Đèn 10</span>
-              <label class="switch block" @click="toggleHumidity">
-                <input type="checkbox" checked />
+              <span class="text-[20px]">Đèn 1</span>
+              <label class="switch block" @click.prevent="toggleLight(1)">
+                <input
+                  type="checkbox"
+                  :checked="isLight1"
+                  class="cursor-default pointer-events-none"
+                />
                 <span class="slider round"></span>
               </label>
             </div>
@@ -117,8 +129,12 @@
           <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Đèn 2</span>
-              <label class="switch block" @click="toggleTemp">
-                <input type="checkbox" checked />
+              <label class="switch block" @click.prevent="toggleLight(2)">
+                <input
+                  type="checkbox"
+                  :checked="isLight2"
+                  class="cursor-default pointer-events-none"
+                />
                 <span class="slider round"></span>
               </label>
             </div>
@@ -131,8 +147,12 @@
           <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Đèn 3</span>
-              <label class="switch block" @click="toggleLight">
-                <input type="checkbox" checked />
+              <label class="switch block" @click.prevent="toggleLight(3)">
+                <input
+                  type="checkbox"
+                  :checked="isLight3"
+                  class="cursor-default pointer-events-none"
+                />
                 <span class="slider round"></span>
               </label>
             </div>
@@ -149,12 +169,63 @@
           <Line :data="data" :options="options" class="w-full" />
         </div>
       </div>
+
+      <!-- Add data -->
+      <div class="flex justify-between mt-5">
+        <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[380px]">
+          <div
+            class="glassmorphism w-[261px] h-[180px] px-8 relative"
+            :class="{ 'blink-red': light > 1000 }"
+          >
+            <div class="flex justify-between items-center mt-8">
+              <span class="text-[20px]">Đèn 4</span>
+              <label class="switch block" @click.prevent="toggleLight(4)">
+                <input
+                  type="checkbox"
+                  :checked="isLight4"
+                  class="cursor-default pointer-events-none"
+                />
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <img
+              src="../assets/images/light.svg"
+              alt=""
+              class="absolute left-0 -bottom-22 w-[180px]"
+            />
+          </div>
+
+          <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
+            <div class="flex justify-between items-center mt-8">
+              <span class="text-[20px]">Đèn 5</span>
+              <label class="switch block" @click.prevent="toggleLight(5)">
+                <input
+                  type="checkbox"
+                  :checked="isLight5"
+                  class="cursor-default pointer-events-none"
+                />
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <img
+              src="../assets/images/light.svg"
+              alt=""
+              class="absolute left-0 -bottom-22 w-[180px]"
+            />
+          </div>
+        </div>
+        <div
+          class="flex justify-center items-center w-[678px] h-[380px] glassmorphism px-10 py-6"
+        >
+          <Line :data="newData" :options="options" class="w-full" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from "vue"
+import { defineComponent, onMounted, onUnmounted, reactive, ref } from "vue"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -166,6 +237,8 @@ import {
   Legend,
 } from "chart.js"
 import { Line } from "vue-chartjs"
+import axios from "axios"
+import dayjs from "dayjs"
 
 ChartJS.register(
   CategoryScale,
@@ -183,15 +256,74 @@ export default defineComponent({
     Line,
   },
   setup() {
-    const isTemp = ref(true)
-    const isHumidity = ref(true)
-    const isLight = ref(true)
+    let intervalId = null
+    let intervalId2 = null
 
-    const data = reactive({
+    const currentTime = ref("")
+    const currentDay = ref("")
+    const currentDate = ref("")
+
+    const temp = ref(null)
+    const humidity = ref(null)
+    const light = ref(null)
+    const isLight1 = ref(true)
+    const isLight2 = ref(true)
+    const isLight3 = ref(true)
+    const isLight4 = ref(true)
+    const isLight5 = ref(true)
+
+    const data = ref({
       labels: ["January", "February", "March"],
       datasets: [
         {
+          label: "Nhiệt độ (°C)",
           data: [40, 20, 12],
+          borderColor: "#E5989B",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+        {
+          label: "Độ ẩm (%)",
+          data: [20, 40, 16],
+          borderColor: "#9EC6F3",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+        {
+          label: "Ánh sáng (lux)",
+          data: [13, 26, 52],
+          borderColor: "white",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+      ],
+    })
+
+    const newData = ref({
+      labels: ["January", "February", "March"],
+      datasets: [
+        {
+          label: "Nhiệt độ (°C)",
+          data: [40, 20, 12],
+          borderColor: "#E5989B",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+        {
+          label: "Độ ẩm (%)",
+          data: [20, 40, 16],
+          borderColor: "#9EC6F3",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+        {
+          label: "Ánh sáng (lux)",
+          data: [13, 26, 52],
           borderColor: "white",
           tension: 0,
           fill: false,
@@ -231,19 +363,156 @@ export default defineComponent({
       },
     })
 
-    function toggleLight() {
-      isLight.value = !isLight.value
+    function toggleLight(number) {
+      if (number === 1) {
+        isLight1.value = !isLight1.value
+      } else if (number === 2) {
+        isLight2.value = !isLight2.value
+      } else if (number === 3) {
+        isLight3.value = !isLight3.value
+      } else if (number === 4) {
+        isLight4.value = !isLight4.value
+      } else if (number === 5) {
+        isLight5.value = !isLight5.value
+      }
     }
 
-    function toggleHumidity() {
-      isHumidity.value = !isHumidity.value
+    function updateTime() {
+      const now = new Date()
+
+      const hours = now.getHours().toString().padStart(2, "0")
+      const minutes = now.getMinutes().toString().padStart(2, "0")
+      currentTime.value = `${hours}:${minutes}`
+
+      const days = [
+        "Chủ nhật",
+        "Thứ 2",
+        "Thứ 3",
+        "Thứ 4",
+        "Thứ 5",
+        "Thứ 6",
+        "Thứ 7",
+      ]
+      currentDay.value = days[now.getDay()]
+
+      const day = now.getDate()
+      const month = now.getMonth() + 1
+      const year = now.getFullYear()
+      currentDate.value = `${day} thg ${month}, ${year}`
     }
 
-    function toggleTemp() {
-      isTemp.value = !isTemp.value
+    const getNewest = async () => {
+      const response = await axios.get("http://localhost:3000/sensors/newest")
+      temp.value = response.data[0].temp
+      humidity.value = response.data[0].humidity
+      light.value = response.data[0].light
     }
 
-    return { data, options, toggleLight, toggleHumidity, toggleTemp }
+    const getChart = async () => {
+      const response = await axios.get("http://localhost:3000/sensors/chart")
+      const chartData = response.data.reverse()
+
+      const labels = chartData.map((item) =>
+        dayjs(item.time).format("HH:mm:ss")
+      )
+
+      const temps = chartData.map((item) => item.temp)
+      const humidities = chartData.map((item) => item.humidity)
+      const lights = chartData.map((item) => item.light)
+
+      data.value = {
+        ...data.value,
+        labels: labels,
+        datasets: [
+          {
+            ...data.value.datasets[0],
+            data: temps,
+          },
+          {
+            ...data.value.datasets[1],
+            data: humidities,
+          },
+          {
+            ...data.value.datasets[2],
+            data: lights,
+          },
+        ],
+      }
+    }
+
+    // const getChart2 = async () => {
+    //   const response = await axios.get("http://localhost:3000/sensors/chart2")
+    //   const chartData = response.data.reverse()
+
+    //   const labels = chartData.map((item) =>
+    //     dayjs(item.time).format("HH:mm:ss")
+    //   )
+
+    //   const temps = chartData.map((item) => item.temp)
+    //   const humidities = chartData.map((item) => item.humidity)
+    //   const lights = chartData.map((item) => item.light)
+
+    //   newData.value = {
+    //     ...newData.value,
+    //     labels: labels,
+    //     datasets: [
+    //       {
+    //         ...newData.value.datasets[0],
+    //         data: temps,
+    //       },
+    //       {
+    //         ...newData.value.datasets[1],
+    //         data: humidities,
+    //       },
+    //       {
+    //         ...newData.value.datasets[2],
+    //         data: lights,
+    //       },
+    //     ],
+    //   }
+    // }
+
+    onMounted(() => {
+      getNewest()
+      getChart()
+      // getChart2()
+      intervalId = setInterval(() => {
+        getNewest()
+      }, 2000)
+
+      intervalId2 = setInterval(() => {
+        getChart()
+        // getChart2()
+      }, 5000)
+
+      setInterval(() => {
+        updateTime()
+      }, 1000)
+    })
+
+    onUnmounted(() => {
+      clearInterval(intervalId)
+      clearInterval(intervalId2)
+    })
+
+    return {
+      currentTime,
+      currentDay,
+      currentDate,
+      data,
+      newData,
+      options,
+      temp,
+      humidity,
+      light,
+      isLight1,
+      isLight2,
+      isLight3,
+      isLight4,
+      isLight5,
+      toggleLight,
+      getNewest,
+    }
   },
 })
 </script>

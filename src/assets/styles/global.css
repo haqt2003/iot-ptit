@@ -164,3 +164,32 @@ input:checked + .slider:before {
   border-radius: 50%;
   background-color: #4e96ff;
 }
+
+@keyframes blink-red {
+  0%,
+  100% {
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+  50% {
+    background-color: rgba(255, 0, 0, 0.5);
+  }
+}
+
+.blink-red {
+  animation: blink-red 1s infinite;
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
+@keyframes glow-red {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0px rgba(255, 0, 0, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255, 0, 0, 1));
+  }
+}
+
+.glow-red {
+  animation: glow-red 1s infinite;
+}
