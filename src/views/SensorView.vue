@@ -59,9 +59,11 @@
                 ? "Độ ẩm"
                 : currentSensor === "time"
                 ? "Thời gian"
-                : // : currentSensor === "other"
-                // ? "Khác"
-                currentSensor === "all"
+                : currentSensor === "pm10"
+                ? "Độ bụi"
+                : currentSensor === "wind"
+                ? "Tốc độ gió"
+                : currentSensor === "all"
                 ? "Tất cả"
                 : (currentSensor = "light" ? "Ánh sáng" : "")
             }}</span>
@@ -70,7 +72,7 @@
           <!-- 48 -> 56 -->
           <div
             v-if="isShow"
-            class="absolute -bottom-48 left-0 w-[229px] p-[8px] rounded-[8px] bg-[#E2E3E4] z-10 text-black"
+            class="absolute -bottom-60 left-0 w-[229px] p-[8px] rounded-[8px] bg-[#E2E3E4] z-10 text-black"
           >
             <div
               @click="onChangeSensor('all')"
@@ -96,12 +98,19 @@
             >
               Ánh sáng
             </div>
-            <!-- <div
-              @click="onChangeSensor('other')"
+            <div
+              @click="onChangeSensor('pm10')"
               class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
             >
-              Khác
-            </div> -->
+              Độ bụi
+            </div>
+
+            <div
+              @click="onChangeSensor('wind')"
+              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
+            >
+              Tốc độ gió
+            </div>
             <div
               @click="onChangeSensor('time')"
               class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
@@ -121,7 +130,7 @@
       <div class="mt-5 w-full glassmorphism">
         <!-- Header Row -->
         <div
-          class="grid grid-cols-5 items-center text-left gap-4 mt-10 pl-16 pr-6"
+          class="grid grid-cols-7 items-center text-left gap-4 mt-10 pl-16 pr-6"
         >
           <span class="font-bold text-[20px]">ID</span>
 
@@ -185,25 +194,45 @@
             />
           </div>
 
-          <!-- <div
-            @click="onSort('other')"
+          <div
+            @click="onSort('pm10')"
             class="flex items-center gap-2 cursor-pointer"
           >
-            <span class="font-bold text-[20px]">Khác</span>
+            <span class="font-bold text-[20px]">Độ bụi</span>
             <img
-              v-if="isSort.direction === true && isSort.name === 'other'"
+              v-if="isSort.direction === true && isSort.name === 'pm10'"
               src="../assets/images/ic_desc.svg"
               alt=""
             />
             <img
               v-if="
-                (isSort.direction === false && isSort.name === 'other') ||
-                isSort.name !== 'other'
+                (isSort.direction === false && isSort.name === 'pm10') ||
+                isSort.name !== 'pm10'
               "
               src="../assets/images/ic_asc.svg"
               alt=""
             />
-          </div> -->
+          </div>
+
+          <div
+            @click="onSort('wind')"
+            class="flex items-center gap-2 cursor-pointer"
+          >
+            <span class="font-bold text-[20px]">Tốc độ gió</span>
+            <img
+              v-if="isSort.direction === true && isSort.name === 'wind'"
+              src="../assets/images/ic_desc.svg"
+              alt=""
+            />
+            <img
+              v-if="
+                (isSort.direction === false && isSort.name === 'wind') ||
+                isSort.name !== 'wind'
+              "
+              src="../assets/images/ic_asc.svg"
+              alt=""
+            />
+          </div>
 
           <div
             @click="onSort('time')"
@@ -232,13 +261,14 @@
           <div
             v-for="(item, index) in list"
             :key="index"
-            class="grid grid-cols-5 items-center text-left gap-4 mt-10"
+            class="grid grid-cols-7 items-center text-left gap-4 mt-10"
           >
             <span>{{ item.id }}</span>
             <span class="ml-5">{{ item.temp }}℃</span>
             <span class="ml-5">{{ item.humidity }}%</span>
             <span class="ml-8">{{ item.light }}</span>
-            <!-- <span class="ml-6">{{ item.other }}</span> -->
+            <span class="ml-6">{{ item.pm10 }}</span>
+            <span class="ml-6">{{ item.windspeed }}</span>
             <span>{{ formatDate(item.time) }}</span>
           </div>
         </div>
@@ -341,10 +371,8 @@ export default {
       const response = await axios.get(
         `http://localhost:3000/sensors?searchValue=${searchValue.value}&type=${currentSensor.value}&sortType=${isSort.value.name}&sortDirection=${sort}&pageNumber=${pageNumber.value}&pageSize=${pageSize.value}`
       )
-      list.value = response.data
-
-      const count = await axios.get("http://localhost:3000/sensors/count")
-      totalData.value = count.data
+      list.value = response.data.data
+      totalData.value = parseInt(response.data.count, 10)
     }
 
     watch([searchValue, currentSensor, pageNumber, pageSize], () => {
