@@ -59,9 +59,7 @@
                 ? "Độ ẩm"
                 : currentSensor === "time"
                 ? "Thời gian"
-                : currentSensor === "pm10"
-                ? "Độ bụi"
-                : currentSensor === "wind"
+                : currentSensor === "windspeed"
                 ? "Tốc độ gió"
                 : currentSensor === "all"
                 ? "Tất cả"
@@ -72,7 +70,7 @@
           <!-- 48 -> 56 -->
           <div
             v-if="isShow"
-            class="absolute -bottom-60 left-0 w-[229px] p-[8px] rounded-[8px] bg-[#E2E3E4] z-10 text-black"
+            class="absolute -bottom-56 left-0 w-[229px] p-[8px] rounded-[8px] bg-[#E2E3E4] z-10 text-black"
           >
             <div
               @click="onChangeSensor('all')"
@@ -99,14 +97,7 @@
               Ánh sáng
             </div>
             <div
-              @click="onChangeSensor('pm10')"
-              class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
-            >
-              Độ bụi
-            </div>
-
-            <div
-              @click="onChangeSensor('wind')"
+              @click="onChangeSensor('windspeed')"
               class="rounded-[4px] cursor-pointer flex items-center gap-[10px] px-5 py-1 hover:bg-[#59a2ff] hover:text-white"
             >
               Tốc độ gió
@@ -130,7 +121,7 @@
       <div class="mt-5 w-full glassmorphism">
         <!-- Header Row -->
         <div
-          class="grid grid-cols-7 items-center text-left gap-4 mt-10 pl-16 pr-6"
+          class="grid grid-cols-6 items-center text-left gap-4 mt-10 pl-16 pr-6"
         >
           <span class="font-bold text-[20px]">ID</span>
 
@@ -193,41 +184,20 @@
               alt=""
             />
           </div>
-
           <div
-            @click="onSort('pm10')"
-            class="flex items-center gap-2 cursor-pointer"
-          >
-            <span class="font-bold text-[20px]">Độ bụi</span>
-            <img
-              v-if="isSort.direction === true && isSort.name === 'pm10'"
-              src="../assets/images/ic_desc.svg"
-              alt=""
-            />
-            <img
-              v-if="
-                (isSort.direction === false && isSort.name === 'pm10') ||
-                isSort.name !== 'pm10'
-              "
-              src="../assets/images/ic_asc.svg"
-              alt=""
-            />
-          </div>
-
-          <div
-            @click="onSort('wind')"
+            @click="onSort('windspeed')"
             class="flex items-center gap-2 cursor-pointer"
           >
             <span class="font-bold text-[20px]">Tốc độ gió</span>
             <img
-              v-if="isSort.direction === true && isSort.name === 'wind'"
+              v-if="isSort.direction === true && isSort.name === 'windspeed'"
               src="../assets/images/ic_desc.svg"
               alt=""
             />
             <img
               v-if="
-                (isSort.direction === false && isSort.name === 'wind') ||
-                isSort.name !== 'wind'
+                (isSort.direction === false && isSort.name === 'windspeed') ||
+                isSort.name !== 'windspeed'
               "
               src="../assets/images/ic_asc.svg"
               alt=""
@@ -261,13 +231,12 @@
           <div
             v-for="(item, index) in list"
             :key="index"
-            class="grid grid-cols-7 items-center text-left gap-4 mt-10"
+            class="grid grid-cols-6 items-center text-left gap-4 mt-10"
           >
             <span>{{ item.id }}</span>
             <span class="ml-5">{{ item.temp }}℃</span>
             <span class="ml-5">{{ item.humidity }}%</span>
             <span class="ml-8">{{ item.light }}</span>
-            <span class="ml-6">{{ item.pm10 }}</span>
             <span class="ml-6">{{ item.windspeed }}</span>
             <span>{{ formatDate(item.time) }}</span>
           </div>

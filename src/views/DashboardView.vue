@@ -63,11 +63,7 @@
               </div>
             </div>
             <div class="flex items-center gap-4">
-              <img
-                src="../assets/images/light-icon.svg"
-                alt=""
-                :class="{ 'glow-red': pm10 > 60 }"
-              />
+              <img src="../assets/images/light-icon.svg" alt="" />
               <div class="">
                 <span class="text-[14px] font-light">Ánh sáng</span>
                 <span class="block font-bold">{{ light }}</span>
@@ -108,17 +104,20 @@
       </div>
       <div class="flex justify-between mt-5">
         <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[380px]">
-          <div class="glassmorphism w-full h-[180px] px-8 relative">
+          <div
+            class="glassmorphism w-full h-[180px] px-8 relative"
+            :class="{ 'blink-red': wind > 50 }"
+          >
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Đèn 1</span>
-              <label class="switch block" @click.prevent="toggleLight(1)">
+              <!-- <label class="switch block" @click.prevent="toggleLight(1)">
                 <input
                   type="checkbox"
                   :checked="isLight1"
                   class="cursor-default pointer-events-none"
                 />
                 <span class="slider round"></span>
-              </label>
+              </label> -->
             </div>
             <img
               src="../assets/images/light.svg"
@@ -188,11 +187,8 @@
 
       <!-- Add data -->
       <div class="flex justify-between mt-5">
-        <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[380px]">
-          <div
-            class="glassmorphism w-[261px] h-[180px] px-8 relative"
-            :class="{ 'blink-red': light > 1000 }"
-          >
+        <div class="flex flex-wrap justify-between gap-5 w-[542px] h-[180px]">
+          <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
             <div class="flex justify-between items-center mt-8">
               <span class="text-[20px]">Đèn 4</span>
               <div class="flex items-center gap-1">
@@ -218,38 +214,6 @@
               class="absolute left-0 -bottom-22 w-[180px]"
             />
           </div>
-
-          <div class="glassmorphism w-[261px] h-[180px] px-8 relative">
-            <div class="flex justify-between items-center mt-8">
-              <span class="text-[20px]">Đèn 5</span>
-              <div class="flex items-center gap-1">
-                <img
-                  v-if="isLoading5"
-                  src="../assets/images/loading.svg"
-                  alt=""
-                  class="w-8"
-                />
-                <label class="switch block" @click.prevent="toggleLight(5)">
-                  <input
-                    type="checkbox"
-                    :checked="isLight5"
-                    class="cursor-default pointer-events-none"
-                  />
-                  <span class="slider round"></span>
-                </label>
-              </div>
-            </div>
-            <img
-              src="../assets/images/light.svg"
-              alt=""
-              class="absolute left-0 -bottom-22 w-[180px]"
-            />
-          </div>
-        </div>
-        <div
-          class="flex justify-center items-center w-[678px] h-[380px] glassmorphism px-10 py-6"
-        >
-          <Line :data="newData" :options="options" class="w-full" />
         </div>
       </div>
     </div>
@@ -298,20 +262,17 @@ export default defineComponent({
     const temp = ref(null)
     const humidity = ref(null)
     const light = ref(null)
-    const pm10 = ref(null)
     const wind = ref(null)
 
     const isLight1 = ref(false)
     const isLight2 = ref(false)
     const isLight3 = ref(false)
     const isLight4 = ref(false)
-    const isLight5 = ref(false)
 
     const isLoading1 = ref(false)
     const isLoading2 = ref(false)
     const isLoading3 = ref(false)
     const isLoading4 = ref(false)
-    const isLoading5 = ref(false)
 
     const data = ref({
       labels: ["January", "February", "March"],
@@ -336,6 +297,14 @@ export default defineComponent({
           label: "Ánh sáng (lux)",
           data: [13, 26, 52],
           borderColor: "white",
+          tension: 0,
+          fill: false,
+          borderWidth: 2,
+        },
+        {
+          label: "Tốc độ gió (m/s)",
+          data: [13, 26, 52],
+          borderColor: "#F1BA88",
           tension: 0,
           fill: false,
           borderWidth: 2,
@@ -415,6 +384,7 @@ export default defineComponent({
           name: "led 2",
           action: actionValue,
         })
+        console.log(response.data.message)
         if (response.data.message === "success") {
           isLight2.value = !isLight2.value
         }
@@ -426,6 +396,7 @@ export default defineComponent({
           name: "led 3",
           action: actionValue,
         })
+        console.log(response.data.message)
         if (response.data.message === "success") {
           isLight3.value = !isLight3.value
         }
@@ -441,17 +412,6 @@ export default defineComponent({
           isLight4.value = !isLight4.value
         }
         isLoading4.value = false
-      } else if (number === 5) {
-        actionValue = isLight5.value ? 0 : 1
-        isLoading5.value = true
-        const response = await axios.post("http://localhost:3000/devices/", {
-          name: "led 5",
-          action: actionValue,
-        })
-        if (response.data.message === "success") {
-          isLight5.value = !isLight5.value
-        }
-        isLoading5.value = false
       }
     }
 
@@ -484,13 +444,16 @@ export default defineComponent({
       temp.value = response.data[0].temp
       humidity.value = response.data[0].humidity
       light.value = response.data[0].light
-      pm10.value = response.data[0].pm10
       wind.value = response.data[0].windspeed
     }
 
     const getChart = async () => {
       const response = await axios.get("http://localhost:3000/sensors/chart")
+      const response2 = await axios.get("http://localhost:3000/sensors/chart2")
       const chartData = response.data.reverse()
+
+      const chartData2 = response2.data.reverse()
+      const windSpeed = chartData2.map((item) => item.windspeed)
 
       const labels = chartData.map((item) =>
         dayjs(item.time).format("HH:mm:ss")
@@ -516,32 +479,8 @@ export default defineComponent({
             ...data.value.datasets[2],
             data: lights,
           },
-        ],
-      }
-    }
-
-    const getChart2 = async () => {
-      const response = await axios.get("http://localhost:3000/sensors/chart2")
-      console.log(response)
-      const chartData = response.data.reverse()
-
-      const labels = chartData.map((item) =>
-        dayjs(item.time).format("HH:mm:ss")
-      )
-
-      const pm10 = chartData.map((item) => item.pm10)
-      const windSpeed = chartData.map((item) => item.windspeed)
-
-      newData.value = {
-        ...newData.value,
-        labels: labels,
-        datasets: [
           {
-            ...newData.value.datasets[0],
-            data: pm10,
-          },
-          {
-            ...newData.value.datasets[1],
+            ...data.value.datasets[3],
             data: windSpeed,
           },
         ],
@@ -551,14 +490,12 @@ export default defineComponent({
     onMounted(() => {
       getNewest()
       getChart()
-      getChart2()
       intervalId = setInterval(() => {
         getNewest()
       }, 1000)
 
       intervalId2 = setInterval(() => {
         getChart()
-        getChart2()
       }, 5000)
 
       setInterval(() => {
@@ -581,18 +518,15 @@ export default defineComponent({
       temp,
       humidity,
       light,
-      pm10,
       wind,
       isLight1,
       isLight2,
       isLight3,
       isLight4,
-      isLight5,
       isLoading1,
       isLoading2,
       isLoading3,
       isLoading4,
-      isLoading5,
       toggleLight,
       getNewest,
     }

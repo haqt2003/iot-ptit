@@ -166,10 +166,8 @@ export default {
       const response = await axios.get(
         `http://localhost:3000/devices?searchTime=${searchTime.value}&sortDirection=${sort}&pageNumber=${pageNumber.value}&pageSize=${pageSize.value}`
       )
-      list.value = response.data
-
-      const count = await axios.get("http://localhost:3000/devices/count")
-      totalData.value = count.data
+      list.value = response.data.data
+      totalData.value = parseInt(response.data.count, 10)
     }
 
     watch([searchTime, isSortDesc, pageNumber, pageSize], () => {

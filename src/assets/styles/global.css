@@ -176,7 +176,7 @@ input:checked + .slider:before {
 }
 
 .blink-red {
-  animation: blink-red 1s infinite;
+  animation: blink-red 1s 2s;
   border-color: rgba(255, 0, 0, 0.5);
 }
 
