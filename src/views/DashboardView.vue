@@ -370,12 +370,10 @@ export default defineComponent({
       if (number === 1) {
         actionValue = isLight1.value ? 0 : 1
         isLoading1.value = true
-        const response = await axios.post("http://localhost:3000/devices/", {
+        await axios.post("http://localhost:3000/devices/", {
           name: "led 1",
           action: actionValue,
         })
-        console.log(response.data.message)
-
         isLight1.value = !isLight1.value
       } else if (number === 2) {
         actionValue = isLight2.value ? 0 : 1
@@ -384,9 +382,10 @@ export default defineComponent({
           name: "led 2",
           action: actionValue,
         })
-        console.log(response.data.message)
         if (response.data.message === "success") {
           isLight2.value = !isLight2.value
+        } else {
+          alert("Led 2 Timeout")
         }
         isLoading2.value = false
       } else if (number === 3) {
@@ -396,9 +395,10 @@ export default defineComponent({
           name: "led 3",
           action: actionValue,
         })
-        console.log(response.data.message)
         if (response.data.message === "success") {
           isLight3.value = !isLight3.value
+        } else {
+          alert("Led 3 Timeout")
         }
         isLoading3.value = false
       } else if (number === 4) {
@@ -410,6 +410,8 @@ export default defineComponent({
         })
         if (response.data.message === "success") {
           isLight4.value = !isLight4.value
+        } else {
+          alert("Led 4 Timeout")
         }
         isLoading4.value = false
       }
@@ -487,7 +489,21 @@ export default defineComponent({
       }
     }
 
+    const getStatus = async () => {
+      const response = await axios.get("http://localhost:3000/devices/newest")
+      response.data.forEach((item) => {
+        if (item.name === "led 2") {
+          isLight2.value = item.action
+        } else if (item.name === "led 3") {
+          isLight3.value = item.action
+        } else if (item.name === "led 4") {
+          isLight4.value = item.action
+        }
+      })
+    }
+
     onMounted(() => {
+      getStatus()
       getNewest()
       getChart()
       intervalId = setInterval(() => {
@@ -529,6 +545,7 @@ export default defineComponent({
       isLoading4,
       toggleLight,
       getNewest,
+      getStatus,
     }
   },
 })
